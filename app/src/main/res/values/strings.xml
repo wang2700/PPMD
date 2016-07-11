@@ -4,4 +4,6 @@
     <string name="about_us_button">About Us</string>
     <string name="database_button">Database</string>
     <string name="take_photo_button">Take Photo</string>
+    <string name="choose_source_gallery">Gallery</string>
+    <string name="choose_sourcce_camera">Take Photo</string>
 </resources>
