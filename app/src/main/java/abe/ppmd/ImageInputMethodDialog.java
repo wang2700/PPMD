@@ -25,7 +25,6 @@ public class ImageInputMethodDialog extends DialogFragment {
         inputMethod.setItems(photoMenu, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int item) {
-                //boolean result = Utility.checkPermission(ImageInputMethodDialog.this);
                 if (photoMenu[item].equals(getString(R.string.choose_sourcce_camera))) {
                     userChosenTask = getString(R.string.choose_sourcce_camera);
                         cameraIntent();

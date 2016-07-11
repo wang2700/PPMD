@@ -27,7 +27,7 @@ public class StartUpScreen extends AppCompatActivity {
     private Button selectPhoto;
     private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
     private Bitmap imageImported;
-    private ImageView test;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +41,6 @@ public class StartUpScreen extends AppCompatActivity {
                 myFragment.show(getFragmentManager(), "theDialog");
             }
         });
-        test = (ImageView) findViewById(R.id.test);
 
     }
 
@@ -62,7 +61,6 @@ public class StartUpScreen extends AppCompatActivity {
         imageImported = (Bitmap) data.getExtras().get("data");
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();
         imageImported.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-        test.setImageBitmap(imageImported);
     }
 
     private void onSelectFromGalleryResult(Intent data) {
@@ -74,7 +72,6 @@ public class StartUpScreen extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-        test.setImageBitmap(imageImported);
     }
 
     @Override
