@@ -6,4 +6,5 @@
     <string name="take_photo_button">Take Photo</string>
     <string name="choose_source_gallery">Gallery</string>
     <string name="choose_sourcce_camera">Take Photo</string>
+    <string name="title_activity_setup_analysis">Setup Analysis</string>
 </resources>

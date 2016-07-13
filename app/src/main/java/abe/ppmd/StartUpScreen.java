@@ -25,8 +25,7 @@ import java.io.IOException;
 public class StartUpScreen extends AppCompatActivity {
 
     private Button selectPhoto;
-    private int REQUEST_CAMERA = 0, SELECT_FILE = 1;
-    private Bitmap imageImported;
+
 
 
     @Override
@@ -44,35 +43,6 @@ public class StartUpScreen extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == Activity.RESULT_OK){
-            if(requestCode == SELECT_FILE){
-                onSelectFromGalleryResult(data);
-            }else if(requestCode == REQUEST_CAMERA){
-                onCaptureImageResult(data);
-            }
-        }
-    }
-
-    private void onCaptureImageResult(Intent data) {
-
-        imageImported = (Bitmap) data.getExtras().get("data");
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        imageImported.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-    }
-
-    private void onSelectFromGalleryResult(Intent data) {
-        imageImported = null;
-        if (data != null){
-            try{
-                imageImported = MediaStore.Images.Media.getBitmap(getApplicationContext().getContentResolver(),data.getData());
-            } catch (IOException e){
-                e.printStackTrace();
-            }
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
