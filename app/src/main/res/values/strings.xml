@@ -7,4 +7,5 @@
     <string name="choose_source_gallery">Gallery</string>
     <string name="choose_sourcce_camera">Take Photo</string>
     <string name="title_activity_setup_analysis">Setup Analysis</string>
+    <string name="select_plant_title">Select The Plant</string>
 </resources>

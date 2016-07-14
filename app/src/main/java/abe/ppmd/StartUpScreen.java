@@ -37,6 +37,8 @@ public class StartUpScreen extends AppCompatActivity {
     private int REQUEST_CAMERA = 0;
     private File photoFile;
     private String mCurrentPhotoPath;
+    private String plantSelected;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class StartUpScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("Camera Intent","Camera Intent Started");
-                photoCapture();
+                selectPlant();
             }
         });
 
@@ -63,6 +65,7 @@ public class StartUpScreen extends AppCompatActivity {
         if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK){
             if (photoFile.exists()){
                 Intent setupScreen = new Intent(this,SetupAnalysis.class);
+                setupScreen.putExtra("plant",plantSelected);
                 setupScreen.putExtra("file_dir",photoFile);
                 startActivity(setupScreen);
             }
@@ -70,6 +73,7 @@ public class StartUpScreen extends AppCompatActivity {
     }
     public void photoCapture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Log.i("Plant Selected",plantSelected);
         if (takePictureIntent.resolveActivity(getPackageManager())!= null) {
             photoFile = null;
             try {
@@ -112,5 +116,20 @@ public class StartUpScreen extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void selectPlant(){
+
+        final CharSequence[] plants = {"Corn","Soy Bean","Tomato"};
+        final AlertDialog.Builder selectPlant = new AlertDialog.Builder(this);
+        selectPlant.setTitle(R.string.select_plant_title)
+                .setItems(plants, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        plantSelected = plants[i].toString();
+                        photoCapture();
+                    }
+                })
+                .show();
     }
 }

@@ -1,14 +1,11 @@
 package abe.ppmd;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -17,12 +14,13 @@ import android.widget.ImageView;
 import android.net.Uri;
 
 import java.io.File;
-import java.net.Inet4Address;
 
 public class SetupAnalysis extends AppCompatActivity {
 
     private Bitmap rotatedImage;
     private File photoFile;
+    private float threshold;
+    private String plant;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +34,8 @@ public class SetupAnalysis extends AppCompatActivity {
         //Receive image file path from StartupScreen
         Bundle extras = getIntent().getExtras();
         photoFile = (File) extras.get("file_dir");
+        plant = (String) extras.get("plant");
+        Log.i("Setup","Plant:" + plant);
         imageImported = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
 
         //check image orientation and rotate
@@ -85,5 +85,11 @@ public class SetupAnalysis extends AppCompatActivity {
         matrix.postRotate((float)rotateDegree);
         rotatedImage = Bitmap.createBitmap(importImage,0,0,importImage.getWidth(),importImage.getHeight(),matrix,true);
         return rotatedImage;
+    }
+
+    public void setThreshold(View view) {
+
+
+
     }
 }
