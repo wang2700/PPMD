@@ -12,20 +12,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import java.io.File;
+
 public class SetupAnalysis extends AppCompatActivity {
 
     private Bitmap imageImported;
+    private File photoFile;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_analysis);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        Intent getImage = getIntent();
-        //Bundle extras = getIntent().getExtras();
-        //byte[] imageArray = extras.getByteArray("picture");
-        //imageImported = BitmapFactory.decodeByteArray(imageArray, 0, imageArray.length);
-        imageImported = (Bitmap) getImage.getParcelableExtra("picture");
+        Bundle extras = getIntent().getExtras();
+        photoFile = (File) extras.get("file_dir");
+        imageImported = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
         ImageView image = (ImageView)findViewById(R.id.imported_image);
         image.setImageBitmap(imageImported);
         Log.i("Picture Height",Integer.toString(imageImported.getHeight()));

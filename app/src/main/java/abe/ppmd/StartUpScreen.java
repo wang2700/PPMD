@@ -5,11 +5,15 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,17 +22,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class StartUpScreen extends AppCompatActivity {
 
     private Button selectPhoto;
-    private Bitmap imageImported;
     private int REQUEST_CAMERA = 0;
-
+    private File photoFile;
+    private String mCurrentPhotoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +47,7 @@ public class StartUpScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("Camera Intent","Camera Intent Started");
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, REQUEST_CAMERA);
+                photoCapture();
             }
         });
 
@@ -53,23 +60,37 @@ public class StartUpScreen extends AppCompatActivity {
         Log.i("Activity.RESULT_OK",Integer.toString(Activity.RESULT_OK));
         Log.i("RequestCode",Integer.toString(requestCode));
         Log.i("ResultCode",Integer.toString(resultCode));
-        if(resultCode == Activity.RESULT_OK){
-            if(requestCode == REQUEST_CAMERA){
-                onCaptureImageResult(data);
+        if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK){
+            if (photoFile.exists()){
+                Intent setupScreen = new Intent(this,SetupAnalysis.class);
+                setupScreen.putExtra("file_dir",photoFile);
+                startActivity(setupScreen);
             }
         }
     }
-    private void onCaptureImageResult(Intent data) {
-        Log.i("image camera","Getting image from camera");
-        imageImported = (Bitmap) data.getExtras().get("data");
-        Log.i("transfer","Beginning transfer image");
-        //ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        //imageImported.compress(Bitmap.CompressFormat.PNG, 100, bytes);
-        //byte[] imageArray = bytes.toByteArray();
-        Intent setupScreen = new Intent(this,SetupAnalysis.class);
-        //setupScreen.putExtra("picture",imageArray);
-        setupScreen.putExtra("picture",imageImported);
-        startActivity(setupScreen);
+    public void photoCapture() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager())!= null) {
+            photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                Toast.makeText(this, "IOException", Toast.LENGTH_SHORT).show();
+            }
+            if (photoFile != null) {
+                Uri photoURI = FileProvider.getUriForFile(this,"com.example.android.fileprovider",photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
+                startActivityForResult(takePictureIntent, REQUEST_CAMERA);
+            }
+        }
+    }
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName,".jpg",storageDir);
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
