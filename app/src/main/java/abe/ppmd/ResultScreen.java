@@ -16,6 +16,7 @@ public class ResultScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
     }
 
 }
