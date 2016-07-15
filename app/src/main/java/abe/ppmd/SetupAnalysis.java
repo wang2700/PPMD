@@ -1,23 +1,17 @@
 package abe.ppmd;
 
-import android.app.DialogFragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.net.Uri;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.File;
@@ -120,6 +114,6 @@ public class SetupAnalysis extends AppCompatActivity {
         return plant;
     }
 
-    public SetupAnalysis() {
+    public SetupAnalysis (){
     }
 }
