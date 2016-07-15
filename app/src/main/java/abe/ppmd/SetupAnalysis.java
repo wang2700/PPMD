@@ -1,17 +1,23 @@
 package abe.ppmd;
 
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.net.Uri;
+import android.widget.LinearLayout;
 
 import java.io.File;
 
@@ -19,7 +25,7 @@ public class SetupAnalysis extends AppCompatActivity {
 
     private Bitmap rotatedImage;
     private File photoFile;
-    private float threshold;
+    private double threshold = 1.2;
     private String plant;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,9 +93,40 @@ public class SetupAnalysis extends AppCompatActivity {
         return rotatedImage;
     }
 
-    public void setThreshold(View view) {
+    public void  setThreshold(View v){
+        DialogFragment thresholdInput = new ThresholdDialog(this);
+        thresholdInput.show(getFragmentManager(),"threshold");
 
+    }
+
+    public void analyzePhoto(View view) {
 
 
     }
+    /*public void setThreshold(View view){
+        final AlertDialog.Builder setThreshold = new AlertDialog.Builder(SetupAnalysis.this);
+        /*setThreshold.setTitle("Threshold")
+        .setMessage("Enter the threshold value");
+        final EditText input = new EditText(SetupAnalysis.this);
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams();
+        lp.setMargins(10,0,10,0);
+        input.setLayoutParams(lp);
+        input.setText("1.2");
+        setThreshold.setView(input);
+
+        setThreshold.setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                threshold = Double.parseDouble(input.getText().toString());
+                dialogInterface.cancel();
+            }
+        })
+                .setNegativeButton(R.string.dialog_negative, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.cancel();
+                    }
+                })
+                .show();
+    }*/
 }

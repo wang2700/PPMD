@@ -75,7 +75,8 @@
         android:id="@+id/analyze_button"
         android:background="@drawable/analysis"
         android:layout_alignTop="@+id/threshold_button"
-        android:layout_alignEnd="@+id/imported_image" />
+        android:layout_alignEnd="@+id/imported_image"
+        android:onClick="analyzePhoto"/>
 
     <ToggleButton
         android:layout_width="50dp"

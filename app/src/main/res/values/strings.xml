@@ -5,7 +5,11 @@
     <string name="database_button">Database</string>
     <string name="take_photo_button">Take Photo</string>
     <string name="choose_source_gallery">Gallery</string>
-    <string name="choose_sourcce_camera">Take Photo</string>
+    <string name="choose_source_camera">Take Photo</string>
     <string name="title_activity_setup_analysis">Setup Analysis</string>
     <string name="select_plant_title">Select The Plant</string>
+    <string name="set_threshold_dialog_title">Threshold</string>
+    <string name="default_threshold_value">1.2</string>
+    <string name="dialog_positive">OK</string>
+    <string name="dialog_negative">Cancel</string>
 </resources>
