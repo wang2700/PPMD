@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_text_disabled_material_light">
+    <ImageView
+        android:layout_width="75dp"
+        android:layout_height="100dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/image_preview" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_marginTop="5dp"
+            android:text="Plant Name:"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="Date:"
+            android:id="@+id/date_text_view" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="Time:"
+            android:id="@+id/time_text_view" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:text="Plant:"
+            android:id="@+id/plant_type_text_view"
+            android:layout_marginBottom="5dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

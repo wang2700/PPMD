@@ -38,6 +38,7 @@ public class StartUpScreen extends AppCompatActivity {
     private File photoFile;
     private String mCurrentPhotoPath;
     private String plantSelected;
+    private Button database;
 
 
     @Override
@@ -52,8 +53,17 @@ public class StartUpScreen extends AppCompatActivity {
                 selectPlant();
             }
         });
+        database = (Button)findViewById(R.id.data_base_button);
+        database.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("Database","Start database");
+                databaseIntent();
+            }
+        });
 
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -131,5 +141,11 @@ public class StartUpScreen extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    private void databaseIntent() {
+        Intent goToDatabase = new Intent(this,Database.class);
+        goToDatabase.putExtra("file_path",photoFile);
+        startActivity(goToDatabase);
     }
 }
