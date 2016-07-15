@@ -44,7 +44,7 @@ public class SetupAnalysis extends AppCompatActivity {
         orientation = Integer.toString(importPhotoOrientation);
         Log.i("Photo Orientation",orientation);
         rotatedImage = rotateImportImage(importPhotoOrientation,imageImported);
-
+        Log.i("Before display",Boolean.toString(rotatedImage == null));
         //display image
         ImageView image = (ImageView)findViewById(R.id.imported_image);
         image.setImageBitmap(rotatedImage);
@@ -99,10 +99,12 @@ public class SetupAnalysis extends AppCompatActivity {
         if (threshold == 1.2){
             Toast.makeText(this,"The Analysis will be performed with default threshold value of 1.2",Toast.LENGTH_SHORT).show();
         }
-
+        Analysis calculate = new Analysis(this);
+        calculate.calculation(rotatedImage, threshold, plant);
     }
 
     public Bitmap getRotatedImage() {
+        Log.i("Before returm",Boolean.toString(rotatedImage == null));
         return rotatedImage;
     }
 
