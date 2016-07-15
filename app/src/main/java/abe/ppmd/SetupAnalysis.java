@@ -94,13 +94,15 @@ public class SetupAnalysis extends AppCompatActivity {
     }
 
     public void  setThreshold(View v){
-        DialogFragment thresholdInput = new ThresholdDialog(this);
+        ThresholdDialog thresholdInput = new ThresholdDialog(this);
         thresholdInput.show(getFragmentManager(),"threshold");
-
+        threshold = thresholdInput.getThreshold();
     }
 
     public void analyzePhoto(View view) {
+        if (threshold == 1.2){
 
+        }
 
     }
     /*public void setThreshold(View view){

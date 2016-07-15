@@ -8,7 +8,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.EditText;
 
 /**
@@ -35,14 +37,16 @@ public class ThresholdDialog extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final EditText thresholdInput = new EditText(context);
         AlertDialog.Builder setThreshold = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        setThreshold.setView(inflater.inflate(R.layout.set_threshold_edit_text,null))
+        View dialog = inflater.inflate(R.layout.set_threshold_edit_text, null);
+        final EditText thresholdInput = (EditText) dialog.findViewById(R.id.threshold_edit_text);
+        setThreshold.setView(dialog)
                 .setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        threshold = Double.parseDouble(thresholdInput.getText().toString());
+                        Log.i("Threshold",thresholdInput.getText().toString());
+                        threshold = Double.valueOf(thresholdInput.getText().toString().trim());
                         dialogInterface.cancel();
                     }
                 })
