@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.net.Uri;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import java.io.File;
 
@@ -97,38 +98,28 @@ public class SetupAnalysis extends AppCompatActivity {
         ThresholdDialog thresholdInput = new ThresholdDialog(this);
         thresholdInput.show(getFragmentManager(),"threshold");
         threshold = thresholdInput.getThreshold();
+        Log.i("Setup-Threshold:",Double.toString(threshold));
     }
 
     public void analyzePhoto(View view) {
         if (threshold == 1.2){
-
+            Toast.makeText(this,"The Analysis will be performed with default threshold value of 1.2",Toast.LENGTH_SHORT).show();
         }
 
     }
-    /*public void setThreshold(View view){
-        final AlertDialog.Builder setThreshold = new AlertDialog.Builder(SetupAnalysis.this);
-        /*setThreshold.setTitle("Threshold")
-        .setMessage("Enter the threshold value");
-        final EditText input = new EditText(SetupAnalysis.this);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams();
-        lp.setMargins(10,0,10,0);
-        input.setLayoutParams(lp);
-        input.setText("1.2");
-        setThreshold.setView(input);
 
-        setThreshold.setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                threshold = Double.parseDouble(input.getText().toString());
-                dialogInterface.cancel();
-            }
-        })
-                .setNegativeButton(R.string.dialog_negative, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                })
-                .show();
-    }*/
+    public Bitmap getRotatedImage() {
+        return rotatedImage;
+    }
+
+    public double getThreshold() {
+        return threshold;
+    }
+
+    public String getPlant() {
+        return plant;
+    }
+
+    public SetupAnalysis() {
+    }
 }
