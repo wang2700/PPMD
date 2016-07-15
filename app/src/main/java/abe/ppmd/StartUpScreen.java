@@ -36,9 +36,9 @@ public class StartUpScreen extends AppCompatActivity {
     private Button selectPhoto;
     private int REQUEST_CAMERA = 0;
     private File photoFile;
-    private String mCurrentPhotoPath;
     private String plantSelected;
     private Button database;
+    private File storageDir;
 
 
     @Override
@@ -101,9 +101,9 @@ public class StartUpScreen extends AppCompatActivity {
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        Log.i("Storage Dir",storageDir.toString());
         File image = File.createTempFile(imageFileName,".jpg",storageDir);
-        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         return image;
     }
     @Override
@@ -145,7 +145,6 @@ public class StartUpScreen extends AppCompatActivity {
 
     private void databaseIntent() {
         Intent goToDatabase = new Intent(this,Database.class);
-        goToDatabase.putExtra("file_path",photoFile);
         startActivity(goToDatabase);
     }
 }

@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_text_disabled_material_light">
+    android:background="@color/primary_text_disabled_material_light"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp">
+
     <ImageView
         android:layout_width="75dp"
         android:layout_height="100dp"
@@ -18,23 +21,27 @@
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:layout_marginTop="5dp"
-            android:text="Plant Name:"/>
+            android:text="Plant Name:"
+            android:textColor="#ffffff"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:text="Date:"
-            android:id="@+id/date_text_view" />
+            android:id="@+id/date_text_view"
+            android:textColor="#ffffff"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:text="Time:"
-            android:id="@+id/time_text_view" />
+            android:id="@+id/time_text_view"
+            android:textColor="#ffffff"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="25dp"
             android:text="Plant:"
             android:id="@+id/plant_type_text_view"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:textColor="#ffffff"/>
 
     </LinearLayout>
 
