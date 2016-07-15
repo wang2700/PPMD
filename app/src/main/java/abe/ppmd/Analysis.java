@@ -16,6 +16,7 @@ public class Analysis{
     double Moisture;
     double Nitrogen;
 
+
     private static Context context;
 
     public Analysis(Context C) {
