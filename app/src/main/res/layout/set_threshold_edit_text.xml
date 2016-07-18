@@ -32,5 +32,5 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:id="@+id/threshold_edit_text"
-        android:text="@string/default_threshold_value"/>
+        android:hint="Default: 30.0 " />
 </LinearLayout>

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,17 +44,23 @@ public class ThresholdDialog extends DialogFragment {
                 .setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Log.i("Threshold",thresholdInput.getText().toString());
-                        threshold = Double.valueOf(thresholdInput.getText().toString().trim());
-                        dialogInterface.cancel();
+
+                        Log.i("**Threshold",thresholdInput.getText().toString());
+
+                        threshold = Double.valueOf(thresholdInput.getText().toString());
+
+                        Log.i("**Threshold2",Double.toString(threshold));
+
+                        // dialogInterface.cancel();
                     }
                 })
                 .setNegativeButton(R.string.dialog_negative, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
+                        // dialogInterface.cancel();
                     }
                 });
+        Log.i("**FinalThreshold",Double.toString(threshold));
         return setThreshold.create();
     }
 }

@@ -4,30 +4,41 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.util.Log;
 import android.widget.Toast;
+
+
 /**
  * Created by Zhihang Song on 2016-07-15.
  */
+
+
 public class Analysis{
     private Bitmap rotatedImage;
-    private double threshold;
     private Bitmap finalImage;
     String variety;
     double Moisture;
     double Nitrogen;
+    Bitmap resizedBitmap;
+    double NewThreshold;
 
 
     private static Context context;
-
     public Analysis(Context C) {
         context = C;
     }
 
+
     public void calculation(Bitmap rotatedImage, double threshold, String variety) {
+
+        NewThreshold = threshold;
+
+        Log.i("***Ana Threshold:",Double.toString(threshold));
+        Log.i("**Ana Threshold_2:",Double.toString(NewThreshold));
 
         int R, G, B;
         int color;
-        double n = 0;
+        int n = 0;
         long RGB;
         double I;
         int height = rotatedImage.getHeight();
@@ -44,20 +55,19 @@ public class Analysis{
                 finalImage.setPixel(c, r, Color.rgb(R, G, B));
 
                 if ((G > 0 & (G > R) & (G > B))){
-                RGB = 100 * (G * G - R * B) / (G * G);
-                I = R * R + G * G + B * B;
-                if (RGB >= threshold & (I >= 100)) {
-                    n++;
-                    if (calculateRGB(c, r, finalImage) >= 0.9 /* &
+                    RGB = 100 * (G * G - R * B) / (G * G);
+                    I = R * R + G * G + B * B;
+                    if (RGB >= NewThreshold & (I >= 1000)) {
+                        n++;
+                        if (calculateRGB(c, r, finalImage) >= 0.9 /* &
                                       calculateRGB(c,r,finalimage) <= 1.2*/) {
-                        finalImage.setPixel(c, r, Color.rgb(255, 100, 0));
-                        Moisture = (RGB - 15) * 100 / RGB;
-                        Nitrogen = (RGB + 100)/2;
+                            finalImage.setPixel(c, r, Color.rgb(255, G, B));
+                            Moisture = (RGB - 15) * 100 / RGB;
+                            Nitrogen = (RGB + 100)/2;
+                        }
                     }
-                }
             }
             }
-
         }
         if (n == 0) {
             Toast.makeText(context, "No Green pixel found!", Toast.LENGTH_LONG).show();
@@ -77,12 +87,28 @@ public class Analysis{
         return r;
     }
 
+    public static Bitmap scaleDown(Bitmap finalImage, float MaxWidth, float MaxHeight, boolean filter){
+        float ratio = Math.min(
+                MaxWidth / finalImage.getWidth(),
+                MaxHeight / finalImage.getHeight());
+        int width = Math.round( ratio * finalImage.getWidth());
+        int height = Math.round( ratio * finalImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(finalImage,width,height,filter);
+
+        return newBitmap;
+
+    }
+
     public void sendResult (){
+        Bitmap resizedBitmap = scaleDown(finalImage, 300, 400, true);
         Intent resultScreen = new Intent(context,ResultScreen.class);
-        resultScreen.putExtra("finalImage",finalImage);
-        resultScreen.putExtra("Moisture",Moisture);
-        resultScreen.putExtra("Nitrogen",Nitrogen);
+        resultScreen.putExtra("finalImage",resizedBitmap);
+        resultScreen.putExtra("Threshold",NewThreshold);
+        //resultScreen.putExtra("Moisture",Moisture);
+        //resultScreen.putExtra("Nitrogen",Nitrogen);
         context.startActivity(resultScreen);
     }
 
     }
+

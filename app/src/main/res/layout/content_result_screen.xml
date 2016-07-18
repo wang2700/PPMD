@@ -22,17 +22,16 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/save_photo_button"
-        android:layout_above="@+id/textView4"
-        android:layout_alignStart="@+id/textView4"
-        android:layout_marginStart="20dp"
         android:background="@android:drawable/ic_menu_save"
-        android:onClick="savePhoto"/>
+        android:onClick="savePhoto"
+        android:layout_above="@+id/textView4"
+        android:layout_alignStart="@+id/textView4" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Save Photo"
+        android:text="SAVE"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="30dp"

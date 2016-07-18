@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.io.File;
 
@@ -20,8 +19,10 @@ public class SetupAnalysis extends AppCompatActivity {
 
     private Bitmap rotatedImage;
     private File photoFile;
-    private double threshold = 1.2;
+    private double threshold = 50;
     private String plant;
+    private ThresholdDialog thresholdInput = new ThresholdDialog(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,7 +37,7 @@ public class SetupAnalysis extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         photoFile = (File) extras.get("file_dir");
         plant = (String) extras.get("plant");
-        Log.i("Setup","Plant:" + plant);
+        Log.i("**Setup","Plant:" + plant);
         imageImported = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
 
         //check image orientation and rotate
@@ -48,6 +49,7 @@ public class SetupAnalysis extends AppCompatActivity {
         //display image
         ImageView image = (ImageView)findViewById(R.id.imported_image);
         image.setImageBitmap(rotatedImage);
+
         Log.i("Picture Height",Integer.toString(imageImported.getHeight()));
         Log.i("Picture Width",Integer.toString(imageImported.getWidth()));
     }
@@ -89,22 +91,20 @@ public class SetupAnalysis extends AppCompatActivity {
     }
 
     public void  setThreshold(View v){
-        ThresholdDialog thresholdInput = new ThresholdDialog(this);
         thresholdInput.show(getFragmentManager(),"threshold");
-        threshold = thresholdInput.getThreshold();
-        Log.i("Setup-Threshold:",Double.toString(threshold));
     }
 
     public void analyzePhoto(View view) {
-        if (threshold == 1.2){
-            Toast.makeText(this,"The Analysis will be performed with default threshold value of 1.2",Toast.LENGTH_SHORT).show();
-        }
         Analysis calculate = new Analysis(this);
+
+        threshold = thresholdInput.getThreshold();
+        Log.i("**Setup-Threshold:",Double.toString(threshold));
+
         calculate.calculation(rotatedImage, threshold, plant);
     }
 
     public Bitmap getRotatedImage() {
-        Log.i("Before returm",Boolean.toString(rotatedImage == null));
+        Log.i("Before return",Boolean.toString(rotatedImage == null));
         return rotatedImage;
     }
 
