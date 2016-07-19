@@ -20,7 +20,7 @@ public class Analysis{
     double Moisture;
     double Nitrogen;
     Bitmap resizedBitmap;
-    double NewThreshold;
+    double NewThreshold = 30;
 
 
     private static Context context;
@@ -57,14 +57,13 @@ public class Analysis{
                 if ((G > 0 & (G > R) & (G > B))){
                     RGB = 100 * (G * G - R * B) / (G * G);
                     I = R * R + G * G + B * B;
-                    if (RGB >= NewThreshold & (I >= 1000)) {
+                    if (RGB >= NewThreshold & (I >= 3000)) {
                         n++;
-                        if (calculateRGB(c, r, finalImage) >= 0.9 /* &
-                                      calculateRGB(c,r,finalimage) <= 1.2*/) {
+                        //if (calculateRGB(c, r, finalImage) >= 0.9) {
                             finalImage.setPixel(c, r, Color.rgb(255, G, B));
                             Moisture = (RGB - 15) * 100 / RGB;
                             Nitrogen = (RGB + 100)/2;
-                        }
+                        //}
                     }
             }
             }

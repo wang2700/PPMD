@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by jerry on 7/15/2016.
@@ -19,7 +20,7 @@ public class ThresholdDialog extends DialogFragment {
 
 
 
-    private double threshold;
+    private double threshold = 30;
     private Context context;
 
     @SuppressLint("ValidFragment")
@@ -48,6 +49,7 @@ public class ThresholdDialog extends DialogFragment {
                         Log.i("**Threshold",thresholdInput.getText().toString());
 
                         threshold = Double.valueOf(thresholdInput.getText().toString());
+                        Toast.makeText(context, "Threshold has been set to: " + threshold, Toast.LENGTH_LONG).show();
 
                         Log.i("**Threshold2",Double.toString(threshold));
 

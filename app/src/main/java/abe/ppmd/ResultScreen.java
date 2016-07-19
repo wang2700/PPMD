@@ -31,10 +31,10 @@ public class ResultScreen extends AppCompatActivity {
         ResultImage = (ImageView)findViewById(R.id.result_image_view) ;
         ResultImage.setImageBitmap(finalImage);
         if (threshold == 30){
-            Toast.makeText(this,"The Analysis has been performed with default threshold value of " + threshold,Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Analysis finished with default threshold value of: " + threshold,Toast.LENGTH_LONG).show();
         }
         else {
-            Toast.makeText(this,"The Analysis has been performed with threshold value of ." + threshold,Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Analysis finished with User-defined threshold value of: " + threshold,Toast.LENGTH_LONG).show();
         }
 
     }

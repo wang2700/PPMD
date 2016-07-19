@@ -22,6 +22,9 @@ public class SetupAnalysis extends AppCompatActivity {
     private double threshold = 50;
     private String plant;
     private ThresholdDialog thresholdInput = new ThresholdDialog(this);
+    int width, height;
+    double aspectRatio;
+    //Bitmap resizedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +36,7 @@ public class SetupAnalysis extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Receive image file path from StartupScreen
+        //Receive image file path and plant from StartupScreen
         Bundle extras = getIntent().getExtras();
         photoFile = (File) extras.get("file_dir");
         plant = (String) extras.get("plant");
@@ -44,12 +47,47 @@ public class SetupAnalysis extends AppCompatActivity {
         importPhotoOrientation = getCameraPhotoOrientation(this,Uri.fromFile(photoFile),photoFile);
         orientation = Integer.toString(importPhotoOrientation);
         Log.i("Photo Orientation",orientation);
+
+        // Rotate image.
         rotatedImage = rotateImportImage(importPhotoOrientation,imageImported);
         Log.i("Before display",Boolean.toString(rotatedImage == null));
-        //display image
-        ImageView image = (ImageView)findViewById(R.id.imported_image);
-        image.setImageBitmap(rotatedImage);
+        width = rotatedImage.getWidth();
+        height = rotatedImage.getHeight();
+        aspectRatio = width / height;
 
+        // If it is necessary:
+        // Check if the aspect ratio (w : h) of he image is 3 : 4 (0.75).
+        // If not, popup alert message and require for changing camera settings and
+        // retake image.
+        /*
+        if(aspectRatio != 0.75){
+            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+            alertDialog.setTitle("Alert");
+            alertDialog.setMessage("Cannot continue analyzing! \n Please set your camera aspect ratio to 4:3");
+            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+            alertDialog.show();
+        }
+        */
+
+        // resize image
+        if (aspectRatio == 0.75) {
+            Bitmap resizedImage = scaleDown(rotatedImage, 600, 800, true);
+            ImageView image = (ImageView)findViewById(R.id.imported_image);
+            image.setImageBitmap(resizedImage);
+        }
+        else {
+            Bitmap resizedImage = scaleDown(rotatedImage, 450, 800, true);
+            ImageView image = (ImageView)findViewById(R.id.imported_image);
+            image.setImageBitmap(resizedImage);
+        }
+
+        // Check LOG
         Log.i("Picture Height",Integer.toString(imageImported.getHeight()));
         Log.i("Picture Width",Integer.toString(imageImported.getWidth()));
     }
@@ -106,6 +144,18 @@ public class SetupAnalysis extends AppCompatActivity {
     public Bitmap getRotatedImage() {
         Log.i("Before return",Boolean.toString(rotatedImage == null));
         return rotatedImage;
+    }
+
+    public static Bitmap scaleDown(Bitmap finalImage, float MaxWidth, float MaxHeight, boolean filter) {
+        float ratio = Math.min(
+                MaxWidth / finalImage.getWidth(),
+                MaxHeight / finalImage.getHeight());
+        int width = Math.round(ratio * finalImage.getWidth());
+        int height = Math.round(ratio * finalImage.getHeight());
+
+        Bitmap newBitmap = Bitmap.createScaledBitmap(finalImage, width, height, filter);
+
+        return newBitmap;
     }
 
     public double getThreshold() {
