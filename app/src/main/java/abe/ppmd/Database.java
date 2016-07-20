@@ -1,6 +1,8 @@
 package abe.ppmd;
 
 import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -8,6 +10,7 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,6 +26,9 @@ public class Database extends AppCompatActivity {
 
     private File[] allFiles;
     private Bitmap[] images;
+    private static final int PICK_IMAGE = 100;
+    Uri imageUri;
+    String photoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,41 @@ public class Database extends AppCompatActivity {
         ListView previewListView = (ListView)findViewById(R.id.image_list_view);
         previewListView.setAdapter(imageAdapter);
 
+    }
+
+    private void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
+    }
+
+    // Get the path to the selected photo in Gallery.
+    public String getPath(Uri uri) {
+        if( uri == null ) {
+            return null;
+        }
+        // try to retrieve the image from the media store first
+        // this will only work for images selected from gallery
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        if( cursor != null ){
+            int column_index = cursor
+                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        }
+        // this is our fallback here
+        return uri.getPath();
+    }
+
+    @Override
+        protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == RESULT_OK && resultCode == PICK_IMAGE){
+            imageUri = data.getData();
+            photoPath = getPath(imageUri);
+            Log.i("*() Check Photo path",Boolean.toString(photoPath == null));
+        }
     }
 
     @Override
@@ -58,6 +99,10 @@ public class Database extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        }
+
+        if (id == R.id.load_from_gallery){
+            openGallery();
         }
 
         return super.onOptionsItemSelected(item);

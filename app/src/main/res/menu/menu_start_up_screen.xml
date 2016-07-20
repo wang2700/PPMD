@@ -9,7 +9,7 @@
         android:icon="@drawable/ic_plus"
         app:showAsAction="never" />
     <item
-        android:id="@+id/load_photo"
+        android:id="@+id/load_from_gallery"
         android:icon="@drawable/ic_plus"
         android:title="@string/load_image_from_gallery"
         android:orderInCategory="200"
