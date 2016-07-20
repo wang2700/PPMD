@@ -32,5 +32,7 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp"
         android:id="@+id/threshold_edit_text"
-        android:hint="Default: 30.0 " />
+        android:hint="Default: 30.0 "
+        android:numeric="integer|decimal"
+        android:text="30" />
 </LinearLayout>

@@ -41,19 +41,20 @@ public class ThresholdDialog extends DialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialog = inflater.inflate(R.layout.set_threshold_edit_text, null);
         final EditText thresholdInput = (EditText) dialog.findViewById(R.id.threshold_edit_text);
+
         setThreshold.setView(dialog)
                 .setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        Log.i("**Threshold",thresholdInput.getText().toString());
+                            Log.i("**Threshold",thresholdInput.getText().toString());
+                            threshold = Double.valueOf(thresholdInput.getText().toString());
+                            Toast.makeText(context, "Threshold has been set to: " + threshold, Toast.LENGTH_LONG).show();
 
-                        threshold = Double.valueOf(thresholdInput.getText().toString());
-                        Toast.makeText(context, "Threshold has been set to: " + threshold, Toast.LENGTH_LONG).show();
+                            Log.i("**Threshold2", Double.toString(threshold));
 
-                        Log.i("**Threshold2",Double.toString(threshold));
+                            // dialogInterface.cancel();
 
-                        // dialogInterface.cancel();
                     }
                 })
                 .setNegativeButton(R.string.dialog_negative, new DialogInterface.OnClickListener() {

@@ -10,6 +10,9 @@ import android.widget.Toast;
 
 /**
  * Created by Zhihang Song on 2016-07-15.
+ * !!! This class is no longer used after the calculation() and all the
+ * other related methods have been moved
+ * to "ResultScreen.java".
  */
 
 
@@ -86,6 +89,16 @@ public class Analysis{
         return r;
     }
 
+    public void sendResult (){
+        // Bitmap resizedBitmap = scaleDown(finalImage, 300, 400, true);
+        Intent resultScreen = new Intent(context,ResultScreen.class);
+        // resultScreen.putExtra("finalImage",finalImage);
+        resultScreen.putExtra("Threshold",NewThreshold);
+        //resultScreen.putExtra("Moisture",Moisture);
+        //resultScreen.putExtra("Nitrogen",Nitrogen);
+        context.startActivity(resultScreen);
+    }
+
     public static Bitmap scaleDown(Bitmap finalImage, float MaxWidth, float MaxHeight, boolean filter){
         float ratio = Math.min(
                 MaxWidth / finalImage.getWidth(),
@@ -97,16 +110,6 @@ public class Analysis{
 
         return newBitmap;
 
-    }
-
-    public void sendResult (){
-        Bitmap resizedBitmap = scaleDown(finalImage, 300, 400, true);
-        Intent resultScreen = new Intent(context,ResultScreen.class);
-        resultScreen.putExtra("finalImage",resizedBitmap);
-        resultScreen.putExtra("Threshold",NewThreshold);
-        //resultScreen.putExtra("Moisture",Moisture);
-        //resultScreen.putExtra("Nitrogen",Nitrogen);
-        context.startActivity(resultScreen);
     }
 
     }

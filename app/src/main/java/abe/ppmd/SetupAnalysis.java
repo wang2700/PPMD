@@ -1,6 +1,7 @@
 package abe.ppmd;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -24,17 +25,18 @@ public class SetupAnalysis extends AppCompatActivity {
     private ThresholdDialog thresholdInput = new ThresholdDialog(this);
     int width, height;
     double aspectRatio;
-    //Bitmap resizedImage;
+    Bitmap resizedImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int importPhotoOrientation;
-        String orientation;
-        Bitmap imageImported;
         setContentView(R.layout.activity_setup_analysis);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        int importPhotoOrientation;
+        String orientation;
+        Bitmap imageImported;
 
         //Receive image file path and plant from StartupScreen
         Bundle extras = getIntent().getExtras();
@@ -55,26 +57,6 @@ public class SetupAnalysis extends AppCompatActivity {
         height = rotatedImage.getHeight();
         aspectRatio = width / height;
 
-        // If it is necessary:
-        // Check if the aspect ratio (w : h) of he image is 3 : 4 (0.75).
-        // If not, popup alert message and require for changing camera settings and
-        // retake image.
-        /*
-        if(aspectRatio != 0.75){
-            AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-            alertDialog.setTitle("Alert");
-            alertDialog.setMessage("Cannot continue analyzing! \n Please set your camera aspect ratio to 4:3");
-            alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            dialogInterface.dismiss();
-                        }
-                    });
-            alertDialog.show();
-        }
-        */
-
         // resize image
         if (aspectRatio == 0.75) {
             Bitmap resizedImage = scaleDown(rotatedImage, 600, 800, true);
@@ -90,7 +72,9 @@ public class SetupAnalysis extends AppCompatActivity {
         // Check LOG
         Log.i("Picture Height",Integer.toString(imageImported.getHeight()));
         Log.i("Picture Width",Integer.toString(imageImported.getWidth()));
+
     }
+
 
     public int getCameraPhotoOrientation(Context context, Uri imageUri, File imagePath){
         int rotate = 0;
@@ -128,19 +112,6 @@ public class SetupAnalysis extends AppCompatActivity {
         return rotatedImage;
     }
 
-    public void  setThreshold(View v){
-        thresholdInput.show(getFragmentManager(),"threshold");
-    }
-
-    public void analyzePhoto(View view) {
-        Analysis calculate = new Analysis(this);
-
-        threshold = thresholdInput.getThreshold();
-        Log.i("**Setup-Threshold:",Double.toString(threshold));
-
-        calculate.calculation(rotatedImage, threshold, plant);
-    }
-
     public Bitmap getRotatedImage() {
         Log.i("Before return",Boolean.toString(rotatedImage == null));
         return rotatedImage;
@@ -158,6 +129,24 @@ public class SetupAnalysis extends AppCompatActivity {
         return newBitmap;
     }
 
+
+    public void  setThreshold(View v){
+        thresholdInput.show(getFragmentManager(),"threshold");
+    }
+
+    public void startAnalyzing(View view) {
+        threshold = thresholdInput.getThreshold();
+
+        Intent startAnalyze = new Intent(this,ResultScreen.class);
+        startAnalyze.putExtra("file_dir",photoFile);
+        startAnalyze.putExtra("threshold",threshold);
+       startActivity(startAnalyze);
+
+        Log.i("**Setup-Threshold:",Double.toString(threshold));
+
+    }
+
+
     public double getThreshold() {
         return threshold;
     }
@@ -166,6 +155,5 @@ public class SetupAnalysis extends AppCompatActivity {
         return plant;
     }
 
-    public SetupAnalysis (){
-    }
+    public SetupAnalysis (){}
 }
