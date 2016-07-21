@@ -138,9 +138,11 @@ public class SetupAnalysis extends AppCompatActivity {
         threshold = thresholdInput.getThreshold();
 
         Intent startAnalyze = new Intent(this,ResultScreen.class);
+        int methodCode = 0;
         startAnalyze.putExtra("file_dir",photoFile);
         startAnalyze.putExtra("threshold",threshold);
-       startActivity(startAnalyze);
+        startAnalyze.putExtra("methodCode",methodCode);
+        startActivity(startAnalyze);
 
         Log.i("**Setup-Threshold:",Double.toString(threshold));
 

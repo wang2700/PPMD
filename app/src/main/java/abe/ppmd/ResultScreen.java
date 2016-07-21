@@ -26,6 +26,10 @@ public class ResultScreen extends AppCompatActivity {
     private File photoFile;
     private String plant;
     private Bitmap rotatedImage;
+    int methodCode;
+    String photoPath;
+    Bitmap imageImported;
+
     //private ThresholdDialog thresholdInput = new ThresholdDialog(this);
 
     @Override
@@ -34,7 +38,6 @@ public class ResultScreen extends AppCompatActivity {
 
         int importPhotoOrientation;
         String orientation;
-        Bitmap imageImported;
 
         setContentView(R.layout.activity_result_screen);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -42,11 +45,27 @@ public class ResultScreen extends AppCompatActivity {
 
         //Receive image file path, and plant from StartupScreen
         Bundle extras = getIntent().getExtras();
-        photoFile = (File) extras.get("file_dir");
-        plant = (String) extras.get("plant");
-        Log.i("**Setup","Plant:" + plant);
-        imageImported = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+        methodCode = (int) extras.get("methodCode");
+        // methodCode = 0;
 
+        Log.i("** Check methodCode",Integer.toString(methodCode));
+
+        switch(methodCode) {
+            case 0:
+                photoFile = (File) extras.get("file_dir");
+                plant = (String) extras.get("plant");
+                Log.i("0**Setup", "Plant:" + plant);
+                imageImported = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                break;
+
+            case 1:
+                photoPath = (String) extras.get("path_from_gallery");
+                plant = (String)extras.get("plant");
+                Log.i("*** path",photoPath);
+                Log.i("1**Setup","Plant:" + plant);
+                imageImported = BitmapFactory.decodeFile(photoPath);
+                break;
+        }
 
 
         //check image orientation and rotate

@@ -63,11 +63,14 @@ public class StartUpScreen extends AppCompatActivity {
         Log.i("Activity.RESULT_OK",Integer.toString(Activity.RESULT_OK));
         Log.i("RequestCode",Integer.toString(requestCode));
         Log.i("ResultCode",Integer.toString(resultCode));
+
         if(requestCode == REQUEST_CAMERA && resultCode == RESULT_OK){
             if (photoFile.exists()){
                 Intent setupScreen = new Intent(this,SetupAnalysis.class);
+                int methodCode = 0;
                 setupScreen.putExtra("plant",plantSelected);
                 setupScreen.putExtra("file_dir",photoFile);
+                setupScreen.putExtra("methodCode",methodCode);
                 startActivity(setupScreen);
             }
         }
