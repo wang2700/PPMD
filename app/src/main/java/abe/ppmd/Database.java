@@ -1,7 +1,6 @@
 package abe.ppmd;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -12,7 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,16 +30,18 @@ public class Database extends AppCompatActivity {
     private static final int PICK_IMAGE = 10;
     Uri imageUri;
     String photoPath;
-    String plantSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_database);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        //File storageDir = getExternalFilesDir(MediaStore.Files.getContentUri());
+        //File storageDir3 = getExternalFilesDir()
         Log.i("Storage Dir",storageDir.toString());
         scanPhoto(storageDir);
 
@@ -54,11 +54,11 @@ public class Database extends AppCompatActivity {
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
-        Log.i("*() Check Photo",Boolean.toString(photoPath == null));
+
     }
 
     // Get the path to the selected photo
-    public String getPath(Uri uri) {
+    public String gettPath(Uri uri) {
         if( uri == null ) {
             return null;
         }
@@ -81,19 +81,13 @@ public class Database extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
             imageUri = data.getData();
-            photoPath = getPath(imageUri);
+            photoPath = gettPath(imageUri);
             Log.i("***() Check Photo path",photoPath);
 
-            // Send photo path to ResultScreen for analyzing.
-            Thread t1 = new Thread(plantSelected = selectPlant());
-            t1.start();
-            Log.i("**Check plant",Boolean.toString(plantSelected == null));
-
-            if(plantSelected != null && photoPath != null) {
-                Intent gallery = new Intent(this, ResultScreen.class);
+            if(photoPath != null) {
+                Intent gallery = new Intent(this, SetupAnalysis.class);
                 int methodCode = 1;
                 gallery.putExtra("path_from_gallery", photoPath);
-                gallery.putExtra("plant", plantSelected);
                 gallery.putExtra("methodCode",methodCode);
                 startActivity(gallery);
             }
@@ -192,20 +186,5 @@ public class Database extends AppCompatActivity {
         rotatedImage = Bitmap.createBitmap(scaledImage,0,0,scaledImage.getWidth(),scaledImage.getHeight(),matrix,true);
         return rotatedImage;
     }
-
-    public String selectPlant(){
-        final CharSequence[] plants = {"Corn","Soy Bean","Tomato"};
-        final AlertDialog.Builder selectPlant = new AlertDialog.Builder(this);
-        selectPlant.setTitle(R.string.select_plant_title)
-                .setItems(plants, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                       plantSelected = plants[i].toString();
-                    }
-                })
-                .show();
-        Log.i("** Check plant",plantSelected);
-        return plantSelected;
     }
 
-}

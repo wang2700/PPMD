@@ -26,8 +26,6 @@ public class ResultScreen extends AppCompatActivity {
     private File photoFile;
     private String plant;
     private Bitmap rotatedImage;
-    int methodCode;
-    String photoPath;
     Bitmap imageImported;
 
     //private ThresholdDialog thresholdInput = new ThresholdDialog(this);
@@ -43,29 +41,12 @@ public class ResultScreen extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Receive image file path, and plant from StartupScreen
+
         Bundle extras = getIntent().getExtras();
-        methodCode = (int) extras.get("methodCode");
-        // methodCode = 0;
-
-        Log.i("** Check methodCode",Integer.toString(methodCode));
-
-        switch(methodCode) {
-            case 0:
-                photoFile = (File) extras.get("file_dir");
-                plant = (String) extras.get("plant");
-                Log.i("0**Setup", "Plant:" + plant);
-                imageImported = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                break;
-
-            case 1:
-                photoPath = (String) extras.get("path_from_gallery");
-                plant = (String)extras.get("plant");
-                Log.i("*** path",photoPath);
-                Log.i("1**Setup","Plant:" + plant);
-                imageImported = BitmapFactory.decodeFile(photoPath);
-                break;
-        }
+        photoFile = (File) extras.get("file_dir");
+        plant = (String) extras.get("plant");
+        Log.i("0**Setup", "Plant:" + plant);
+        imageImported = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
 
 
         //check image orientation and rotate
@@ -83,8 +64,6 @@ public class ResultScreen extends AppCompatActivity {
 
         analyzePhoto();
 
-        showImage();
-
         // Former version, get lower resolution bitmap from Analysis.class
         /*
         Bundle extras = getIntent().getExtras();
@@ -93,7 +72,6 @@ public class ResultScreen extends AppCompatActivity {
         nitrogen = (double) extras.get("Nitrogen");
         threshold = (double) extras.get("Threshold");
         */
-
     }
 
     public int getCameraPhotoOrientation(Context context, Uri imageUri, File imagePath){
@@ -212,7 +190,7 @@ public class ResultScreen extends AppCompatActivity {
         if (n == 0) {
             Toast.makeText(this, "No Green pixel found!", Toast.LENGTH_LONG).show();
         }
-
+        showImage();
     }
 
     public double calculateRGB(int x, int y, Bitmap rotatedImage) {
@@ -226,6 +204,4 @@ public class ResultScreen extends AppCompatActivity {
         r = 100 * (G * G - R * B) / (G * G);
         return r;
     }
-
-
 }

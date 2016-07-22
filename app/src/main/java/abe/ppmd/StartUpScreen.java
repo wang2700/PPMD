@@ -1,14 +1,12 @@
 package abe.ppmd;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -41,7 +39,7 @@ public class StartUpScreen extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i("Camera Intent","Camera Intent Started");
-                selectPlant();
+                photoCapture();
             }
         });
         database = (Button)findViewById(R.id.data_base_button);
@@ -68,7 +66,7 @@ public class StartUpScreen extends AppCompatActivity {
             if (photoFile.exists()){
                 Intent setupScreen = new Intent(this,SetupAnalysis.class);
                 int methodCode = 0;
-                setupScreen.putExtra("plant",plantSelected);
+                // setupScreen.putExtra("plant",plantSelected);
                 setupScreen.putExtra("file_dir",photoFile);
                 setupScreen.putExtra("methodCode",methodCode);
                 startActivity(setupScreen);
@@ -77,14 +75,16 @@ public class StartUpScreen extends AppCompatActivity {
     }
     public void photoCapture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Log.i("Plant Selected",plantSelected);
         if (takePictureIntent.resolveActivity(getPackageManager())!= null) {
             photoFile = null;
             try {
                 photoFile = createImageFile();
-            } catch (IOException e) {
+            }
+
+            catch (IOException e) {
                 Toast.makeText(this, "IOException", Toast.LENGTH_SHORT).show();
             }
+
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(this,"com.example.android.fileprovider",photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoURI);
@@ -96,7 +96,7 @@ public class StartUpScreen extends AppCompatActivity {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        Log.i("Storage Dir",storageDir.toString());
+        Log.i("*** Storage Dir",storageDir.toString());
         File image = File.createTempFile(imageFileName,".jpg",storageDir);
         return image;
     }
@@ -120,21 +120,6 @@ public class StartUpScreen extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void selectPlant(){
-
-        final CharSequence[] plants = {"Corn","Soy Bean","Tomato"};
-        final AlertDialog.Builder selectPlant = new AlertDialog.Builder(this);
-        selectPlant.setTitle(R.string.select_plant_title)
-                .setItems(plants, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        plantSelected = plants[i].toString();
-                        photoCapture();
-                    }
-                })
-                .show();
     }
 
     private void databaseIntent() {
