@@ -23,10 +23,11 @@ import java.util.Date;
 public class StartUpScreen extends AppCompatActivity {
 
     private Button selectPhoto;
+    private Button database;
+    private Button aboutUs;
     private int REQUEST_CAMERA = 0;
     private File photoFile;
     private String plantSelected;
-    private Button database;
     private File storageDir;
 
 
@@ -48,6 +49,14 @@ public class StartUpScreen extends AppCompatActivity {
             public void onClick(View view) {
                 Log.i("Database","Start database");
                 databaseIntent();
+            }
+        });
+        aboutUs = (Button)findViewById(R.id.about_us_button);
+        aboutUs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent about_us = new Intent("abe.ppmd.AboutUs");
+                startActivity(about_us);
             }
         });
 
