@@ -48,10 +48,15 @@
             android:name=".Database"
             android:label="@string/title_activity_database"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AboutUs"></activity>
-        <activity android:name=".AboutUs"
+        <activity
+            android:name=".AboutUs"
             android:label="About Us"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <intent-filter>
+            <action android:name="abe.ppmd.AboutUs" />
+
+            <category android:name="android.intent.category.DEFAULT" />
+        </intent-filter>
     </application>
 
 </manifest>

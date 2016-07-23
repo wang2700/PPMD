@@ -55,8 +55,8 @@ public class StartUpScreen extends AppCompatActivity {
         aboutUs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent about_us = new Intent("abe.ppmd.AboutUs");
-                startActivity(about_us);
+
+                aboutUsIntent();
             }
         });
 
@@ -134,5 +134,9 @@ public class StartUpScreen extends AppCompatActivity {
     private void databaseIntent() {
         Intent goToDatabase = new Intent(this,Database.class);
         startActivity(goToDatabase);
+    }
+    public void aboutUsIntent() {
+        Intent about_us = new Intent(this,AboutUs.class);
+        startActivity(about_us);
     }
 }
