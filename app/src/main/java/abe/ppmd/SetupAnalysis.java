@@ -23,7 +23,7 @@ public class SetupAnalysis extends AppCompatActivity {
 
     private Bitmap rotatedImage;
     private File photoFile;
-    private double threshold = 50;
+    private double threshold = 30;
     private String plant;
     private ThresholdDialog thresholdInput = new ThresholdDialog(this);
     int width, height;
@@ -168,8 +168,6 @@ public class SetupAnalysis extends AppCompatActivity {
     public void startAnalyzing() {
         threshold = thresholdInput.getThreshold();
 
-
-
         Intent startAnalyze = new Intent(this,ResultScreen.class);
         int methodCode = 0;
         startAnalyze.putExtra("file_dir",photoFile);
@@ -177,10 +175,8 @@ public class SetupAnalysis extends AppCompatActivity {
         startAnalyze.putExtra("methodCode",methodCode);
         startAnalyze.putExtra("plant",selectedPlant);
         startActivity(startAnalyze);
-
-        Log.i("**Setup-Threshold:",Double.toString(threshold));
-
     }
+
     public String selectPlant() {
         final CharSequence[] plants = {"Corn", "Soy Bean", "Tomato"};
         final AlertDialog.Builder selectPlant = new AlertDialog.Builder(this);

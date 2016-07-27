@@ -1,5 +1,6 @@
 package abe.ppmd;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +29,13 @@ public class ResultScreen extends AppCompatActivity {
     private String plant;
     private Bitmap rotatedImage;
     Bitmap imageImported;
+    private ProgressDialog progress;
+    private int color, Red, Gre, Blu, height, width, n;
+    private long RGB;
+    private double I;
+
+    Bitmap Image;
+    double Threshold;
 
     //private ThresholdDialog thresholdInput = new ThresholdDialog(this);
 
@@ -62,16 +71,12 @@ public class ResultScreen extends AppCompatActivity {
         rotatedImage = rotateImportImage(importPhotoOrientation,resizedImage);
         Log.i("Before display",Boolean.toString(rotatedImage == null));
 
+        // Open Progress Bar.
+
+
+        // Start analyzing.
         analyzePhoto();
 
-        // Former version, get lower resolution bitmap from Analysis.class
-        /*
-        Bundle extras = getIntent().getExtras();
-        finalImage = (Bitmap) extras.get("finalImage");
-        moisture = (double) extras.get("Moisture");
-        nitrogen = (double) extras.get("Nitrogen");
-        threshold = (double) extras.get("Threshold");
-        */
     }
 
     public int getCameraPhotoOrientation(Context context, Uri imageUri, File imagePath){
@@ -121,6 +126,7 @@ public class ResultScreen extends AppCompatActivity {
         Log.i("**Setup","Plant:" + plant);
         Log.i("**Setup-Threshold:",Double.toString(threshold));
 
+
         calculation(rotatedImage, threshold, plant);
     }
 
@@ -152,56 +158,84 @@ public class ResultScreen extends AppCompatActivity {
     // Analyze the photo.
     public void calculation(Bitmap rotatedImage, double threshold, String variety) {
 
-        Log.i("***Ana Threshold:",Double.toString(threshold));
-        Log.i("**Ana Threshold_2:",Double.toString(threshold));
+        Log.i("* Check Image", Boolean.toString(rotatedImage == null));
+        Log.i("* Check Threshold", Double.toString(threshold));
 
-        int R, G, B;
-        int color;
-        int n = 0;
-        long RGB;
-        double I;
-        int height = rotatedImage.getHeight();
-        int width = rotatedImage.getWidth();
+        // Initialize values of the image.
+        n = 0;
+        Image = rotatedImage;
+        height = Image.getHeight();
+        width = Image.getWidth();
+
+        Threshold = threshold;
         finalImage = Bitmap.createBitmap(rotatedImage.getWidth(),
                 rotatedImage.getHeight(), rotatedImage.getConfig());
-        for (int r = 0; r < height; r++) {
-            for (int c = 0; c < width; c++) {
 
-                color = rotatedImage.getPixel(c, r);
-                R = Color.red(color);
-                G = Color.green(color);
-                B = Color.blue(color);
-                finalImage.setPixel(c, r, Color.rgb(R, G, B));
+        // Set progress bar.
+        progress = new ProgressDialog(ResultScreen.this);
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setTitle("LOADING...");
+        progress.setMessage("Please wait for analyzing...");
+        progress.setIndeterminate(false);
+        progress.setCancelable(false);
+        progress.setMax(height);
 
-                if ((G > 0 & (G > R) & (G > B))){
-                    RGB = 100 * (G * G - R * B) / (G * G);
-                    I = R * R + G * G + B * B;
-                    if (RGB >= threshold & (I >= 3000)) {
-                        n++;
-                        //if (calculateRGB(c, r, finalImage) >= 0.9) {
-                        finalImage.setPixel(c, r, Color.rgb(255, G, B));
-                        moisture = (RGB - 15) * 100 / RGB;
-                        nitrogen = (RGB + 100)/2;
-                        //}
+        // Start a new AsyncTask.
+        new CalAsyncTask().execute();
+        }
+
+    public class CalAsyncTask extends AsyncTask<Bitmap, Integer, Bitmap>{
+
+        // onPreExecute
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+            progress.show();
+        }
+
+        // doInBackground
+        protected Bitmap doInBackground (Bitmap...params){
+            try {
+                for (int r = 0; r < height; r++) {
+                    progress.setProgress(r);
+                    for (int c = 0; c < width; c++) {
+
+                        color = Image.getPixel(c, r);
+                        Red = Color.red(color);
+                        Gre = Color.green(color);
+                        Blu = Color.blue(color);
+                        finalImage.setPixel(c, r, Color.rgb(Red, Gre, Blu));
+
+                        if ((Gre > 0 & (Gre > Red) & (Gre > Blu))) {
+                            RGB = 100 * (Gre * Gre - Red * Blu) / (Gre * Gre);
+                            I = Red * Red + Gre * Gre + Blu * Blu;
+                            if (RGB >= Threshold & (I >= 3000)) {
+                                n++;
+                                finalImage.setPixel(c, r, Color.rgb(255, Gre, Blu));
+                                moisture = (RGB - 15) * 100 / RGB;
+                                nitrogen = (RGB + 100) / 2;
+                            }
+                        }
                     }
                 }
+                if (n == 0)
+                {Toast.makeText(ResultScreen.this, "No Green pixel found!", Toast.LENGTH_LONG).show();}
+                progress.cancel();
             }
+            catch (Exception e) {progress.cancel();}
+            return finalImage;
         }
-        if (n == 0) {
-            Toast.makeText(this, "No Green pixel found!", Toast.LENGTH_LONG).show();
-        }
-        showImage();
-    }
 
-    public double calculateRGB(int x, int y, Bitmap rotatedImage) {
-        int R, G, B;
-        double r;
-        int color;
-        color = rotatedImage.getPixel(x, y);
-        R = Color.red(color) ;
-        G = Color.green(color) ;
-        B = Color.blue(color) ;
-        r = 100 * (G * G - R * B) / (G * G);
-        return r;
+        @Override
+        protected void onProgressUpdate(Integer...values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result){
+            super.onPostExecute(result);
+            // progress.dismiss();
+            showImage();
+        }
     }
 }
