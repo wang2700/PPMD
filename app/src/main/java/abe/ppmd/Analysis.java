@@ -63,7 +63,7 @@ public class Analysis{
                     if (RGB >= NewThreshold & (I >= 3000)) {
                         n++;
                         //if (calculateRGB(c, r, finalImage) >= 0.9) {
-                            finalImage.setPixel(c, r, Color.rgb(255, G, B));
+                            finalImage.setPixel(c, r, Color.rgb(R, G, 255));
                             Moisture = (RGB - 15) * 100 / RGB;
                             Nitrogen = (RGB + 100)/2;
                         //}
