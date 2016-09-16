@@ -81,6 +81,12 @@ public class StartUpScreen extends AppCompatActivity {
                 startActivity(setupScreen);
             }
         }
+        if (requestCode == REQUEST_CAMERA && resultCode != RESULT_OK){
+            if (photoFile.exists()){
+                photoFile.delete();
+                Log.i("Check photo File", Boolean.toString(photoFile == null));
+            }
+        }
     }
     public void photoCapture() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

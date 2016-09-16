@@ -34,6 +34,7 @@ public class ResultScreen extends AppCompatActivity {
     private long RGB;
     private double I;
 
+
     Bitmap Image;
     double Threshold;
 
